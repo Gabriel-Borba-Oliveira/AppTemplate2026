@@ -39,6 +39,9 @@ class DashboardFragment : Fragment() {
     private lateinit var selectImageButton: Button
     private lateinit var databaseReference: DatabaseReference
     private lateinit var storageReference: StorageReference
+
+    private lateinit var categoriaEditText: EditText
+    private lateinit var duracaoEditText: EditText
     private lateinit var auth: FirebaseAuth
 
     companion object {
@@ -67,6 +70,8 @@ class DashboardFragment : Fragment() {
         salvarButton = view.findViewById(R.id.salvarItemButton)
         selectImageButton = view.findViewById(R.id.button_select_image)
         enderecoEditText = view.findViewById(R.id.enderecoItemEditText)
+        categoriaEditText = view.findViewById(R.id.categoriaEstudoEditText)
+        duracaoEditText = view.findViewById(R.id.duracaoEditText)
         //TODO("Capture aqui os outro campos que foram inseridos no layout. Por exemplo, ate
         // o momento so foi capturado o endereco (EditText)")
 
@@ -98,6 +103,8 @@ class DashboardFragment : Fragment() {
     private fun salvarItem() {
         //TODO("Capture aqui o conteudo que esta nos outros editTexts que foram criados")
         val endereco = enderecoEditText.text.toString().trim()
+        val categoria = categoriaEditText.text.toString().trim()
+        val duracao = duracaoEditText.text.toString().trim()
 
         if (endereco.isEmpty() || imageUri == null) {
             Toast.makeText(context, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT)
@@ -117,9 +124,11 @@ class DashboardFragment : Fragment() {
             if (bytes != null) {
                 val base64Image = Base64.encodeToString(bytes, Base64.DEFAULT)
                 val endereco = enderecoEditText.text.toString().trim()
+                val categoria = categoriaEditText.text.toString().trim()
+                val duracao = duracaoEditText.text.toString().trim()
                 //TODO("Capture aqui o conteudo que esta nos outros editTexts que foram criados")
 
-                val item = Item(endereco, base64Image)
+                val item = Item(endereco, base64Image,categoria,duracao)
 
                 saveItemIntoDatabase(item)
             }

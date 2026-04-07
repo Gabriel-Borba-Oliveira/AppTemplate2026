@@ -5,17 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".ui.dashboard.DashboardFragment">
-
 
     <TextView
         android:id="@+id/text_dashboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="Cadastro de ..."
+        android:text="Nova Tarefa de Estudo"
+        android:textColor="#FF4444"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,8 +26,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="Store Photo"
+        android:contentDescription="Imagem do estudo"
         android:scaleType="centerCrop"
         android:src="@android:drawable/gallery_thumb"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,32 +36,65 @@
     <Button
         android:id="@+id/button_select_image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
+        android:backgroundTint="#FF4444"
         android:text="Selecionar Imagem"
+        android:textAllCaps="false"
+        app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_item" />
 
-
     <EditText
         android:id="@+id/enderecoItemEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
         android:hint="Endereço"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_select_image" />
 
+    <EditText
+        android:id="@+id/categoriaEstudoEditText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:hint="Categoria"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enderecoItemEditText" />
+
+    <EditText
+        android:id="@+id/duracaoEditText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:hint="Duração (minutos)"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoriaEstudoEditText" />
 
     <Button
         android:id="@+id/salvarItemButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Salvar"
-        app:layout_constraintTop_toBottomOf="@id/enderecoItemEditText"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#FF4444"
+        android:text="Salvar Tarefa"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:layout_constraintTop_toBottomOf="@id/duracaoEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
