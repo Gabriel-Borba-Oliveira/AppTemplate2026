@@ -5,16 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:padding="16dp"
     tools:context=".ui.usuario.PerfilUsuarioFragment">
 
     <TextView
         android:id="@+id/textCadastroUsuarioTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         android:text="Perfil de Usuário"
-        android:textSize="24sp"
+        android:textColor="#FF4444"
+        android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,82 +23,109 @@
 
     <ImageView
         android:id="@+id/userProfileImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
         android:src="@mipmap/ic_default_user"
+        android:contentDescription="Foto de perfil"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toBottomOf="@id/textCadastroUsuarioTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="Foto de perfil"/>
-
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/registerNameEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
         android:hint="Nome"
-        android:layout_marginTop="16dp"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userProfileImageView"/>
+        app:layout_constraintTop_toBottomOf="@id/userProfileImageView" />
 
     <EditText
         android:id="@+id/registerEmailEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:hint="Email"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@id/registerNameEditText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/registerNameEditText" />
 
     <EditText
         android:id="@+id/registerEnderecoEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:hint="Endereço"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/registerEmailEditText" />
 
     <EditText
         android:id="@+id/registerPasswordEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:hint="Senha"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText" />
 
     <EditText
         android:id="@+id/registerConfirmPasswordEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:hint="Confirmar Senha"
+        android:background="#F5F5F5"
+        android:paddingStart="16dp"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/registerPasswordEditText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/registerPasswordEditText" />
 
     <Button
         android:id="@+id/salvarButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#FF4444"
         android:text="Atualizar"
-        app:layout_constraintTop_toBottomOf="@id/registerConfirmPasswordEditText"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/registerConfirmPasswordEditText" />
 
     <Button
         android:id="@+id/sairButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/white"
         android:text="Sair"
-        app:layout_constraintTop_toBottomOf="@id/salvarButton"
+        android:textAllCaps="false"
+        android:textColor="#666666"
+        android:textSize="16sp"
+        app:cornerRadius="8dp"
+        app:strokeColor="#DDDDDD"
+        app:strokeWidth="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        app:layout_constraintTop_toBottomOf="@id/salvarButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
