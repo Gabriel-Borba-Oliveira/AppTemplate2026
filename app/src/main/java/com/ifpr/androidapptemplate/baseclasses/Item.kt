@@ -5,5 +5,6 @@ data class Item(
     val base64Image: String? = null,
     val imageUrl: String? = null,
     val categoria: String? = null,
+    val duracao: Int? = null,
     val dataEstudo: String? = null
 )
