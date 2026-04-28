@@ -1,61 +1,43 @@
 package com.ifpr.androidapptemplate.ui.home
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.Context
+import android.location.Geocoder
+import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import android.util.Base64
 import android.widget.*
-import android.graphics.BitmapFactory
-import android.location.Geocoder
-import android.location.Location
-import android.os.Looper
 import androidx.core.app.ActivityCompat
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SwitchCompat
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.location.Priority
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.firebase.database.*
+import kotlinx.coroutines.*
 import java.util.Locale
 import com.ifpr.androidapptemplate.R
 import com.ifpr.androidapptemplate.baseclasses.Item
-import com.ifpr.androidapptemplate.databinding.FragmentHomeBinding
+import android.graphics.BitmapFactory
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-
     private lateinit var currentAddressTextView: TextView
+    private lateinit var openMapsButton: Button
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
+    private var currentLocation: Location? = null  // Armazenar localização atual
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,26 +48,27 @@ class HomeFragment : Fragment() {
 
         inicializaGerenciamentoLocalizacao(view)
 
-        val container = view.findViewById<LinearLayout>(R.id.itemContainer)
-        carregarItensMarketplace(container)
+        // Inicializar botão
+        openMapsButton = view.findViewById(R.id.openMapsButton)
+        openMapsButton.setOnClickListener {
+            openLocationInGoogleMaps()
+        }
+
+        val containerLayout = view.findViewById<LinearLayout>(R.id.itemContainer)
+        carregarItensMarketplace(containerLayout)
 
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun inicializaGerenciamentoLocalizacao(view: View) {
         currentAddressTextView = view.findViewById(R.id.currentAddressTextView)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
@@ -118,7 +101,7 @@ class HomeFragment : Fragment() {
             } else {
                 Snackbar.make(
                     requireView(),
-                    "Permission denied. Cannot access location.",
+                    "Permissão negada. Não é possível acessar a localização.",
                     Snackbar.LENGTH_LONG
                 ).show()
             }
@@ -129,7 +112,8 @@ class HomeFragment : Fragment() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
@@ -140,16 +124,16 @@ class HomeFragment : Fragment() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { location ->
+                    currentLocation = location  // Armazenar localização
                     displayAddress(location)
                 }
             }
         }
 
         locationRequest = LocationRequest.create().apply {
-            interval = 30000 // Intervalo em milissegundos para atualizacoes de localizacao
-            fastestInterval =
-                30000 // O menor intervalo de tempo para receber atualizacoes de localizacao
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 30000
+            fastestInterval = 30000
+            priority = Priority.PRIORITY_HIGH_ACCURACY
         }
 
         fusedLocationClient.requestLocationUpdates(
@@ -165,16 +149,31 @@ class HomeFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val address = addresses?.firstOrNull()?.getAddressLine(0) ?: "Address not found"
+                val address = addresses?.firstOrNull()?.getAddressLine(0) ?: "Endereço não encontrado"
                 withContext(Dispatchers.Main) {
                     currentAddressTextView.text = address
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    currentAddressTextView.text = "Error: ${e.message}"
+                    currentAddressTextView.text = "Erro: ${e.message}"
                 }
             }
         }
+    }
+
+    // Abrir localização no Google Maps
+    private fun openLocationInGoogleMaps() {
+        if (currentLocation == null) {
+            Toast.makeText(context, "Aguardando localização...", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val latitude = currentLocation!!.latitude
+        val longitude = currentLocation!!.longitude
+
+        val uri = Uri.parse("https://www.google.com/maps/search/?api=1&query=$latitude,$longitude")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
     }
 
     fun carregarItensMarketplace(container: LinearLayout) {
@@ -193,8 +192,12 @@ class HomeFragment : Fragment() {
 
                         val imageView = itemView.findViewById<ImageView>(R.id.item_image)
                         val enderecoView = itemView.findViewById<TextView>(R.id.item_endereco)
+                        val categoriaView = itemView.findViewById<TextView>(R.id.item_categoria)
+                        val duracaoView = itemView.findViewById<TextView>(R.id.item_duracao)
 
                         enderecoView.text = "Endereço: ${item.endereco ?: "Não informado"}"
+                        categoriaView.text = "Categoria: ${item.categoria ?: "Não definida"}"
+                        duracaoView.text = "Duração: ${item.duracao?.toString() ?: "--"} minutos"
 
                         if (!item.imageUrl.isNullOrEmpty()) {
                             Glide.with(container.context).load(item.imageUrl).into(imageView)
